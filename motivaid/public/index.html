@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motivaid - Your Mood Booster</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f0f4f8; }
+    h1 { color: #2c3e50; }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      width: 300px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    #quote {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #555;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      display: inline-block;
+      max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Motivaid 💬</h1>
+  <p>How are you feeling today?</p>
+  <input type="text" id="moodInput" placeholder="e.g. I feel tired and unmotivated" />
+  <br />
+  <button onclick="generateMotivation()">Generate Motivation</button>
+  <div id="quote"></div>
+
+  <script>
+    async function generateMotivation() {
+      const mood = document.getElementById("moodInput").value;
+      const quoteDiv = document.getElementById("quote");
+      quoteDiv.innerText = "Thinking...";
+
+      try {
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ mood })
+        });
+
+        const data = await response.json();
+        quoteDiv.innerText = data.message;
+      } catch (error) {
+        quoteDiv.innerText = "Error: Unable to fetch quote. Please try again later.";
+      }
+    }
+  </script>
+</body>
+</html>
